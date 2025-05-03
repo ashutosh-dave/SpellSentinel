@@ -1,0 +1,7 @@
+Flask
+flask-socketio
+requests
+beautifulsoup4
+lxml
+pandas
+pyspellchecker

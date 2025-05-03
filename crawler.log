@@ -1,0 +1,46 @@
+2025-05-03 10:44:14,544 - WARNING - Custom dictionary 'en_GB.txt' not found. Using default dictionary.
+2025-05-03 10:44:14,546 - INFO - Starting spellcheck audit.
+2025-05-03 10:44:28,819 - INFO - Total URLs found: 1778
+2025-05-03 11:01:59,661 - WARNING - Custom dictionary 'en_GB-large.dic' not found. Using default dictionary.
+2025-05-03 11:01:59,662 - INFO - Starting spellcheck audit.
+2025-05-03 11:02:00,509 - WARNING - Custom dictionary 'en_GB-large.dic' not found. Using default dictionary.
+2025-05-03 11:02:00,510 - INFO - Starting spellcheck audit.
+2025-05-03 11:02:11,844 - INFO - Total URLs found: 1778
+2025-05-03 11:02:13,057 - INFO - Total URLs found: 1778
+2025-05-03 11:45:33,830 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 11:45:40,249 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 11:45:47,187 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 11:45:47,187 - ERROR - Failed to fetch https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/ after 3 attempts.
+2025-05-03 11:46:54,344 - WARNING - Non-200 status code 502 for https://www.auraadesign.co.uk/
+2025-05-03 11:54:51,639 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/meeting-table-black-friday/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 11:59:03,694 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/reception/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 12:00:50,828 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:00:55,914 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:01:01,020 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:01:01,020 - ERROR - Failed to fetch https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/ after 3 attempts.
+2025-05-03 12:01:34,405 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:01:38,614 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:01:42,661 - WARNING - Non-200 status code 500 for https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/
+2025-05-03 12:01:42,662 - ERROR - Failed to fetch https://www.auraadesign.co.uk/yasir-straight-operational-desk-with-optional-credenza/ after 3 attempts.
+2025-05-03 12:19:17,693 - WARNING - Non-200 status code 502 for https://www.auraadesign.co.uk/lyric-2-round-rectangular-and-high-rectangular-meeting-table/
+2025-05-03 12:58:09,625 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/enrique-1-sleek-loop-ring-leg-executive-desk-with-optional-return-supporting-pedestal/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:00:21,696 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/clariss-4-panel-legs-back-to-back-2-step-height-adjustable-operational-office-desk-with-optional-dividing-screen-side-screen-for-2-4-persons/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:00:31,666 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/gerodi-4-fully-upholstered-medium-back-meeting-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:00:58,015 - WARNING - Attempt 2: Failed to fetch https://www.auraadesign.co.uk/clariss-4-panel-legs-back-to-back-2-step-height-adjustable-operational-office-desk-with-optional-dividing-screen-side-screen-for-2-4-persons/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:01:40,513 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/alice-medium-and-high-back-executive-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:01:48,012 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/novara-5-bulb-and-pear-shaped-av-meeting-table-with-multiple-leg-options/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:01:57,368 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/giannino-1-high-back-fully-upholstered-and-seat-back-cushions-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:02:04,502 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/novara-5-bulb-and-pear-shaped-av-meeting-table-with-multiple-leg-options/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:02:16,711 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/giannino-2-medium-back-full-mesh-meeting-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:03:05,789 - WARNING - Attempt 2: Failed to fetch https://www.auraadesign.co.uk/novara-5-bulb-and-pear-shaped-av-meeting-table-with-multiple-leg-options/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:03:07,443 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/aesop-2-curved-reception-desk/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 13:03:33,643 - WARNING - Attempt 2: Failed to fetch https://www.auraadesign.co.uk/giannino-2-medium-back-full-mesh-meeting-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:04:32,556 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/carlotta-glacier-white-reception-desk-with-wheelchair-access-unit/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:05:01,944 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/ophelia-2-curved-white-reception-desk-with-wheelchair-access-unit/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:05:10,359 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/bria-straight-reception-desk-with-designer-front-panels/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:05:13,792 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/giovanni-3-medium-back-swivel-visitor-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out.
+2025-05-03 13:05:30,147 - WARNING - Attempt 2: Failed to fetch https://www.auraadesign.co.uk/giovanni-3-medium-back-swivel-visitor-chair/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 15:20:52,665 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/carmela-private-work-pod-with-optional-table-for-4-and-6-persons/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 15:20:57,073 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/carmela-private-work-pod-with-optional-table-for-4-and-6-persons/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 15:21:13,192 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/arc-reception-desk-with-clear-glass-shelf/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 15:21:27,359 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/ibara-mobile-pedestal/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)

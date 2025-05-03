@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SpellSentinel - Live Logs</title>
+  <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+  <style>
+    body {
+      font-family: monospace;
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 20px;
+    }
+    h1 {
+      color: #58a6ff;
+    }
+    #log {
+      white-space: pre-line;
+      background: #161b22;
+      padding: 1em;
+      border-radius: 8px;
+      height: 80vh;
+      overflow-y: scroll;
+      border: 1px solid #30363d;
+    }
+  </style>
+</head>
+<body>
+  <h1>SpellSentinel 🚀 Live Crawler Logs</h1>
+  <div id="log"></div>
+
+  <script>
+    const socket = io();
+    const logDiv = document.getElementById('log');
+
+    socket.on('log_update', data => {
+      logDiv.textContent += data.log;
+      logDiv.scrollTop = logDiv.scrollHeight;
+    });
+  </script>
+</body>
+</html>
