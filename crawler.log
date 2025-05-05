@@ -44,3 +44,4 @@
 2025-05-03 15:20:57,073 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/carmela-private-work-pod-with-optional-table-for-4-and-6-persons/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
 2025-05-03 15:21:13,192 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/arc-reception-desk-with-clear-glass-shelf/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
 2025-05-03 15:21:27,359 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/ibara-mobile-pedestal/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)
+2025-05-03 17:47:15,345 - WARNING - Attempt 1: Failed to fetch https://www.auraadesign.co.uk/betty-two-seater-bench-with-wood-finish-legs/ - HTTPSConnectionPool(host='www.auraadesign.co.uk', port=443): Read timed out. (read timeout=15)

@@ -1,171 +1,149 @@
-# 🔍 Project: SpellSentinel - British English Web Spell Checker
-
 import requests
 from bs4 import BeautifulSoup
 from urllib.parse import urljoin
 import re
 import pandas as pd
-from spellchecker import SpellChecker
 import time
 import xml.etree.ElementTree as ET
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, ProcessPoolExecutor
 import logging
 from datetime import datetime
+import difflib
+import multiprocessing
 
-# Setup logging
-logging.basicConfig(filename='crawler.log', level=logging.INFO, 
+# Logging
+logging.basicConfig(filename='crawler.log', level=logging.INFO,
                     format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Initialize British English spell checker
-spell = SpellChecker(language='en')
-
-try:
-    spell.word_frequency.load_text_file('en_GB-large.dic')  # Load custom British English dictionary
-    logging.info("Custom British English dictionary loaded successfully.")
-except FileNotFoundError:
-    logging.warning("Custom dictionary 'en_GB-large.dic' not found. Using default dictionary.")
-    print("⚠️ Warning: Custom dictionary 'en_GB-large.dic' not found. Using default dictionary.")
 
 # Config
 BASE_URL = "https://auraadesign.co.uk"
 SITEMAP_URL = urljoin(BASE_URL, "/sitemap_index.xml")
 HEADERS = {"User-Agent": "Mozilla/5.0 (compatible; SpellSentinelBot/1.0)"}
-MAX_WORKERS = 10
+MAX_DOWNLOAD_WORKERS = 30
+MAX_PROCESS_WORKERS = multiprocessing.cpu_count()
 RETRY_LIMIT = 3
 TIMEOUT = 15
 
-# Whitelist of custom terms (brand names, etc.)
-CUSTOM_IGNORE = {"auraa", "auraadesign", "luxury", "wallart", "faux"}
-CUSTOM_IGNORE = {word for word in CUSTOM_IGNORE if word.isalpha()}
+# Load word list once (shared between processes)
+try:
+    with open("en_GB.txt", "r", encoding="utf-8") as f:
+        british_words = set(word.strip().lower() for word in f if word.strip())
+    logging.info("Custom en_GB word list loaded.")
+except FileNotFoundError:
+    logging.error("British English word list 'en_GB.txt' not found. Exiting.")
+    raise SystemExit("❌ 'en_GB.txt' not found.")
 
-# Step 1: Parse sitemap and extract all URLs
+CUSTOM_IGNORE = {"auraa", "auraadesign", "luxury", "wallart", "faux"}
+british_words.update(CUSTOM_IGNORE)
+
+# Shared session
+session = requests.Session()
+session.headers.update(HEADERS)
+
 def extract_urls_from_sitemap(sitemap_url):
     urls = []
     try:
-        resp = requests.get(sitemap_url, headers=HEADERS, timeout=TIMEOUT)
+        resp = session.get(sitemap_url, timeout=TIMEOUT)
         if resp.status_code != 200:
-            logging.warning(f"Failed to fetch sitemap: {sitemap_url}")
             return urls
-
-        try:
-            root = ET.fromstring(resp.content)
-        except ET.ParseError as e:
-            logging.error(f"XML parsing error for sitemap {sitemap_url}: {e}")
-            return urls
-
-        namespace = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
-
-        for sitemap in root.findall("ns:sitemap", namespace):
-            loc = sitemap.find("ns:loc", namespace).text
+        root = ET.fromstring(resp.content)
+        ns = {'ns': 'http://www.sitemaps.org/schemas/sitemap/0.9'}
+        for sitemap in root.findall("ns:sitemap", ns):
+            loc = sitemap.find("ns:loc", ns).text
             urls.extend(extract_urls_from_sitemap(loc))
-
-        for url in root.findall("ns:url", namespace):
-            loc = url.find("ns:loc", namespace)
+        for url in root.findall("ns:url", ns):
+            loc = url.find("ns:loc", ns)
             if loc is not None:
                 urls.append(loc.text)
     except Exception as e:
-        logging.error(f"Error parsing sitemap {sitemap_url}: {e}")
+        logging.error(f"Sitemap parse error: {e}")
     return urls
 
-# Step 2: Clean and extract visible text from HTML
 def extract_text_from_url(url):
     for attempt in range(RETRY_LIMIT):
         try:
-            resp = requests.get(url, headers=HEADERS, timeout=TIMEOUT)
+            resp = session.get(url, timeout=TIMEOUT)
             if resp.status_code != 200:
-                logging.warning(f"Non-200 status code {resp.status_code} for {url}")
                 continue
-
             soup = BeautifulSoup(resp.text, "lxml")
             for tag in soup(["script", "style", "noscript"]):
                 tag.decompose()
-
-            text = soup.get_text(separator=' ')
-            text = re.sub(r'\s+', ' ', text)
-            return text.strip()
+            text = ' '.join(soup.stripped_strings)
+            return url, text.strip()
         except Exception as e:
-            logging.warning(f"Attempt {attempt + 1}: Failed to fetch {url} - {e}")
+            logging.warning(f"Retry {attempt + 1} for {url}: {e}")
             time.sleep(1)
-    logging.error(f"Failed to fetch {url} after {RETRY_LIMIT} attempts.")
-    return ""
+    return url, ""
 
-# Step 3: Spell check the text with context
-def find_spelling_errors(text):
+# Edit-distance suggestion
+def suggest_word(word):
+    matches = difflib.get_close_matches(word, british_words, n=1, cutoff=0.8)
+    return matches[0] if matches else ""
+
+def find_spelling_errors_for_text(data):
+    url, text = data
+    if not text or len(text) < 100:
+        return []
+
     sentences = re.split(r'(?<!\w\.\w.)(?<![A-Z][a-z]\.)(?<=\.|\?)\s', text)
-    errors = []
     seen = set()
+    results = []
 
     for sentence in sentences:
-        words = re.findall(r"\b[a-zA-Z\']+\b", sentence)
-        misspelled = spell.unknown(words) - CUSTOM_IGNORE
+        words = re.findall(r"\b[a-zA-Z']+\b", sentence)
+        for word in words:
+            lw = word.lower()
+            if lw not in british_words and (lw, sentence) not in seen:
+                seen.add((lw, sentence))
+                suggestion = suggest_word(lw)
+                results.append({
+                    "URL": url,
+                    "Misspelled Word": word,
+                    "Suggested Correction (British English)": suggestion,
+                    "Context": sentence.strip()
+                })
 
-        for word in misspelled:
-            if (word, sentence) not in seen:
-                seen.add((word, sentence))
-                correction = spell.correction(word)
-                errors.append((word, correction, sentence.strip()))
-
-    return errors
-
-# Step 4: Process a single URL
-def process_url(url):
-    logging.debug(f"Processing URL: {url}")
-    text = extract_text_from_url(url)
-    logging.debug(f"Extracted text length: {len(text)}")
-    if not text:
-        return []
-    errors = find_spelling_errors(text)
-    logging.debug(f"Found {len(errors)} spelling errors in {url}")
-    results = []
-    for word, correction, context in errors:
-        results.append({
-            "URL": url,
-            "Misspelled Word": word,
-            "Suggested Correction (British English)": correction,
-            "Context": context
-        })
     return results
 
-# Step 5: Run the audit with concurrency
 def run_spellcheck_audit():
-    logging.info("Starting spellcheck audit.")
     urls = extract_urls_from_sitemap(SITEMAP_URL)
     if not urls:
-        logging.error("No URLs found in the sitemap. Exiting.")
-        print("❌ No URLs found in the sitemap. Exiting.")
+        print("❌ No URLs found.")
         return
-    logging.info(f"Total URLs found: {len(urls)}")
 
-    report = []
+    print(f"🔎 Total URLs found: {len(urls)}")
+
+    # Step 1: Fetch content
+    texts = []
     skipped = []
-    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
-        futures = {executor.submit(process_url, url): url for url in urls}
-        for i, future in enumerate(as_completed(futures)):
-            url = futures[future]
+    with ThreadPoolExecutor(max_workers=MAX_DOWNLOAD_WORKERS) as downloader:
+        future_to_url = {downloader.submit(extract_text_from_url, url): url for url in urls}
+        for i, future in enumerate(as_completed(future_to_url)):
+            url = future_to_url[future]
             try:
-                result = future.result(timeout=TIMEOUT)
-                report.extend(result)
-                print(f"[{i+1}/{len(urls)}] Audited {url} ✅")
-            except TimeoutError:
-                logging.error(f"Timeout processing {url}")
-                skipped.append(url)
+                data = future.result()
+                texts.append(data)
+                print(f"[{i+1}/{len(urls)}] Downloaded: {url}")
             except Exception as e:
-                logging.error(f"Error processing {url}: {e}")
+                logging.error(f"Download error for {url}: {e}")
                 skipped.append(url)
 
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    report_filename = f"auraa_spellcheck_report_{timestamp}.csv"
-    skipped_filename = f"skipped_urls_{timestamp}.csv"
+    # Step 2: Spell check using multiprocessing
+    report = []
+    with ProcessPoolExecutor(max_workers=MAX_PROCESS_WORKERS) as processor:
+        futures = processor.map(find_spelling_errors_for_text, texts)
+        for errors in futures:
+            report.extend(errors)
 
-    pd.DataFrame(report).to_csv(report_filename, index=False)
-    pd.DataFrame(skipped, columns=["Skipped URLs"]).to_csv(skipped_filename, index=False)
-    print(f"\n✅ Spellcheck audit complete.")
-    print(f"📄 Report saved: {report_filename}")
-    print(f"⚠️ Skipped URLs saved: {skipped_filename}")
+    # Save results
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    pd.DataFrame(report).to_csv(f"auraa_spellcheck_report_{timestamp}.csv", index=False)
+    pd.DataFrame(skipped, columns=["Skipped URLs"]).to_csv(f"skipped_urls_{timestamp}.csv", index=False)
+
+    print(f"\n✅ Spellcheck complete. Report saved.")
 
 if __name__ == "__main__":
     try:
         run_spellcheck_audit()
     except KeyboardInterrupt:
-        logging.warning("Spellcheck audit interrupted by user.")
-        print("\n❌ Spellcheck audit interrupted.")
+        print("\n❌ Audit interrupted.")
